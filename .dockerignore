@@ -1,0 +1,8 @@
+target
+.git
+.idea
+.mvn/wrapper/dists
+\*.log
+.env
+LOCAL_INTELLIJ_DEPLOY.md
+DEPLOYMENT.md
