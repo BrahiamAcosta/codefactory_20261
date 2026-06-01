@@ -53,3 +53,62 @@ create index if not exists idx_shipments_sender_id on shipments(sender_id);
 create index if not exists idx_shipments_recipient_id on shipments(recipient_id);
 create index if not exists idx_packages_shipment_id on packages(shipment_id);
 create index if not exists idx_logistic_events_shipment_id on logistic_events(shipment_id);
+
+insert into persons (id, nombre, telefono, correo_electronico, direccion, referencias) values
+('P001', 'Juan Pérez', '+57 300 111 2233', 'juan.perez@example.com', 'Calle 10 #20-30, Medellín', 'Casa blanca, portón negro'),
+('P002', 'María Gómez', '+57 301 222 3344', 'maria.gomez@example.com', 'Carrera 43 #7-15, Bogotá', 'Apto 302, edificio Aurora'),
+('P003', 'Carlos Ramírez', '+57 302 333 4455', 'carlos.ramirez@example.com', 'Transversal 5 #18-40, Cali', 'Frente al parque'),
+('P004', 'Laura Torres', '+57 304 444 5566', 'laura.torres@example.com', 'Av. Santander #12-50, Bucaramanga', 'Timbre lado derecho'),
+('P005', 'Andrés Herrera', '+57 305 555 6677', 'andres.herrera@example.com', 'Calle 45 #33-21, Barranquilla', 'Casa esquinera');
+
+insert into shipments (
+	id_envio,
+	sender_id,
+	recipient_id,
+	tipo_servicio,
+	nivel_prioridad,
+	codigo_rastreo,
+	estado_actual,
+	fecha_envio,
+	fecha_estimada,
+	fecha_actualizacion,
+	costo_total,
+	instrucciones_envio
+) values
+(1, 'P001', 'P002', 'Express', 5, 'TRK-2026-0001', 'En tránsito', '2026-04-28', '2026-04-30', '2026-04-29', 35000.00, 'Entregar únicamente en horario laboral.'),
+(2, 'P003', 'P004', 'Estandar', 3, 'TRK-2026-0002', 'Creado', '2026-04-29', '2026-05-03', '2026-04-29', 18000.00, 'Empaque frágil. Manipular con cuidado.'),
+(3, 'P005', 'P001', 'Prioritario', 4, 'TRK-2026-0003', 'Entregado', '2026-04-25', '2026-04-27', '2026-04-27', 22000.00, 'Llamar antes de llegar.');
+
+insert into packages (
+	id_paquete,
+	shipment_id,
+	peso,
+	largo,
+	ancho,
+	alto,
+	descripcion
+) values
+(1, 1, 2.50, 30.00, 20.00, 10.00, 'Caja con documentos y accesorios electrónicos'),
+(2, 1, 1.20, 15.00, 10.00, 8.00, 'Sobre reforzado'),
+(3, 2, 5.80, 40.00, 25.00, 18.00, 'Paquete con artículos de hogar'),
+(4, 3, 0.75, 25.00, 15.00, 5.00, 'Sobres con papelería');
+
+insert into logistic_events (
+	id_evento,
+	shipment_id,
+	tipo_evento,
+	estado_resultante,
+	ubicacion,
+	observacion,
+	fecha_evento
+) values
+(1, 1, 'Creación de envío', 'Creado', 'Centro de distribución Medellín', 'Registro inicial del envío', '2026-04-28 09:15:00'),
+(2, 1, 'Despacho', 'En tránsito', 'Centro de distribución Medellín', 'Salió hacia la ciudad destino', '2026-04-28 14:20:00'),
+(3, 1, 'Llegada a hub', 'En tránsito', 'Hub Bogotá', 'Clasificación para última milla', '2026-04-29 08:45:00'),
+(4, 2, 'Creación de envío', 'Creado', 'Sucursal Cali', 'Pendiente de recogida', '2026-04-29 10:00:00'),
+(5, 3, 'Entrega', 'Entregado', 'Barranquilla', 'Recibido por el destinatario', '2026-04-27 16:35:00'),
+(6, 3, 'Cierre', 'Entregado', 'Barranquilla', 'Sin novedades', '2026-04-27 17:00:00');
+
+alter table shipments alter column id_envio restart with 4;
+alter table packages alter column id_paquete restart with 5;
+alter table logistic_events alter column id_evento restart with 7;
